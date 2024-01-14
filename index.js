@@ -18,9 +18,12 @@ const client = new MongoClient(uri, {
 async function run() {
 
     const cloudDataCollection = await client.db('cloudDB').collection("clout_datas");
-
     try {
-        app.get("/cloud-datas", async (req, res) => {
+
+
+        //  cloud data for hosting 
+        // get method apply
+        app.get("/hosting-datas", async (req, res) => {
             try {
                 const result = await cloudDataCollection.find().toArray();
                 res.send(result)
@@ -29,6 +32,23 @@ async function run() {
                 console.log(error);
             }
         })
+        
+        app.get('/hosting-data/:category', async(req,res) => {
+            try{
+            const category = req.params.category;
+            const query = {category: category}
+              const result = await hostingsCollection.find(query).toArray();
+              res.send(result)
+            }
+            catch(error){
+              console.log(error);
+            }
+          })
+
+
+
+
+
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
