@@ -32,20 +32,35 @@ async function run() {
                 console.log(error);
             }
         })
-        
-        app.get('/hosting-data/:category', async(req,res) => {
-            try{
-            const category = req.params.category;
-            const query = {category: category}
-              const result = await hostingsCollection.find(query).toArray();
-              res.send(result)
+        // get category for unique data by category name
+        app.get('/hosting-data/:category', async (req, res) => {
+            try {
+                const category = req.params.category;
+                const query = { category: category }
+                const result = await hostingsCollection.find(query).toArray();
+                res.send(result)
             }
-            catch(error){
-              console.log(error);
+            catch (error) {
+                console.log(error);
             }
-          })
-
-
+        })
+        //  get data when search only data 
+        app.get('/hostings', async (req, res) => {
+            try {
+                const filter = req.query;
+                const query = {
+                    category: {
+                        $regex: filter.search,
+                        $options: 'i'
+                    }
+                }
+                const result = await hostingsCollection.find(query).toArray();
+                res.send(result)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        })
 
 
 
